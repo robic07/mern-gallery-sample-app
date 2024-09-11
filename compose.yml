@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - localstack
+      - mongodb
+    env_file: 
+      - backend/.env
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - VITE_BACKEND_ENDPOINT=http://localhost:5000
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - mongodbdata:/data/db
+    ports:
+      - 27017:27017
+
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=s3
+      - GATEWAY_LISTEN=0.0.0.0:4566
+      - S3_BUCKET_NAME=mysamplebucket
+    volumes:
+      - ./localstack:/docker-entrypoint-initaws.d" 
+
+volumes:
+  mongodbdata:
+
