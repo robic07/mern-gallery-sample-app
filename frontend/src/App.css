@@ -14,36 +14,12 @@ main {
 }
 
 footer {
-  margin-top: 20px;
+  position:absolute;
+  bottom: 0;
   padding: 10px;
   background-color: #f1f1f1;
   color: #555;
-}
-
-input[type="file"] {
-  margin: 10px 0;
-}
-
-button {
-  margin: 10px 0;
-  padding: 10px 20px;
-  background-color: #282c34;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #3c404a;
-}
-
-a {
-  color: #61dafb;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+  width: 100%;
 }
 
 .img-grid, .img-grid:before, .img-grid:after{
@@ -81,4 +57,15 @@ a:hover {
 
 .img-grid .grid-6{
   width:16.666667%;
+}
+
+#upload {
+  opacity: 0;
+}
+
+#upload-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
 }

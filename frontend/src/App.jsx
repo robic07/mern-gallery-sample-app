@@ -5,11 +5,18 @@ import ImageList from './components/ImageList';
 import './App.css';
 
 function App() {
+  const serverHostname = import.meta.env.VITE_SERVER_HOSTNAME || '';
+  console.log(serverHostname)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>My To-Do List</h1>
-      </header>
+<section className="title-banner py-4 bg-success text-white" id="title-banner">
+      <div className="container">
+        <div className="row">
+          <h4>Todo Image Gallery</h4>
+        </div>
+      </div>
+    </section>
       <main>
         <TodoList />
         <ImageUpload />
@@ -17,6 +24,7 @@ function App() {
       </main>
       <footer>
         <p>&copy; 2024 My To-Do App</p>
+        <p>This app is running on: <strong>{serverHostname.toString()}</strong></p>
       </footer>
     </div>
   );

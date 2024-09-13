@@ -11,6 +11,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+S3_ENDPOINT_URL = 'https://s3.amazonaws.com'
+
 // Connect to MongoDB using the environment variable
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/todos', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
@@ -61,7 +64,7 @@ app.delete('/api/todos/:id', async (req, res) => {
 const s3 = new S3Client({
   region: process.env.AWS_REGION || 'us-east-1',
   forcePathStyle: true,
-  endpoint: process.env.S3_ENDPOINT_URL || 'https://s3.amazonaws.com', // Use LocalStack or default AWS S3
+  endpoint: S3_ENDPOINT_URL,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'default_access_key', // Default for development
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'default_secret_key',
@@ -113,7 +116,7 @@ app.get('/api/images', async (req, res) => {
     if (data.Contents) {
       // Generate URLs for each object in the bucket
       const imageUrls = data.Contents.map(item => {
-        return `${process.env.S3_ENDPOINT_URL}/${process.env.S3_BUCKET_NAME}/${item.Key}`;
+        return `${S3_ENDPOINT_URL}/${process.env.S3_BUCKET_NAME}/${item.Key}`;
       });
 
       // Return the list of image URLs

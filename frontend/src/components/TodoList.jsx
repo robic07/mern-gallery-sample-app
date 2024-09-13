@@ -24,22 +24,32 @@ const TodoList = () => {
       .then(() => setTodos(todos.filter(todo => todo._id !== id)))
       .catch(error => console.error('Error deleting todo:', error));
   };
-
   return (
-    <div>
-      <h1>Todo List</h1>
-      <input
+    <div className="container">
+      <div className="row">
+        <div className="col-sm">
+        <div className="input-group mb-3">
+        <input
         type="text"
         value={newTodo}
+        className="form-control"
+        placeholder="Add new todo Item"
         onChange={(e) => setNewTodo(e.target.value)}
       />
-      <button onClick={addTodo}>Add Todo</button>
-      <div>
-        {todos.map(todo => (
+      <button className="btn btn-dark" onClick={addTodo}>Add Task</button>
+</div>
+        </div>
+      </div>
+      
+      <div className="card mt-3">
+      <h5 className="card-header h5">To do List</h5>
+      <ul className="list-group">
+        {Array.isArray(todos) && todos.map(todo => (
           <TodoItem key={todo._id} todo={todo} onDelete={deleteTodo} />
         ))}
+        </ul>
       </div>
-    </div>
+      </div>
   );
 };
 

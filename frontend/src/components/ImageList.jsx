@@ -12,11 +12,16 @@ const ImageList = () => {
 
     console.log(images)
   return (
-    <div>
-        <h1>Images</h1>
+    <div className="title-banner py-4">
+      <div className="container">
+        <div className="row">
+        <h4>Images</h4>
+        </div>
+      </div>
+        
         <div className="img-grid">
-            {images.map(image => (
-            <img key={image} src={image}/>
+            {Array.isArray(images) && images.map(image => (
+              <img key={image} src={image}/>
             ))}
         </div>
     </div>

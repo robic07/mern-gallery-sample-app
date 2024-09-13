@@ -6,17 +6,21 @@ services:
     ports:
       - 5000:5000
     depends_on:
-      - localstack
       - mongodb
-    env_file: 
-      - backend/.env
+    environment: 
+      - MONGODB_URI=mongodb://mongodb:27017/todos
+      - AWS_ACCESS_KEY_ID=AKIA3IDI4BWI7KMHFQFK
+      - AWS_SECRET_ACCESS_KEY=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
+      - S3_BUCKET_NAME=image-gallery-test-bucket
+      - AWS_REGION=us-east-1
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      - VITE_BACKEND_ENDPOINT=http://localhost:5000
+      args:
+          VITE_BACKEND_ENDPOINT: http://localhost:5000
+          VITE_SERVER_HOSTNAME: ${HOSTNAME}
     ports:
       - 3000:3000
     depends_on:
@@ -29,18 +33,6 @@ services:
       - mongodbdata:/data/db
     ports:
       - 27017:27017
-
-  localstack:
-    image: localstack/localstack
-    container_name: localstack
-    ports:
-      - 4566:4566
-    environment:
-      - SERVICES=s3
-      - GATEWAY_LISTEN=0.0.0.0:4566
-      - S3_BUCKET_NAME=mysamplebucket
-    volumes:
-      - ./localstack:/docker-entrypoint-initaws.d" 
 
 volumes:
   mongodbdata:

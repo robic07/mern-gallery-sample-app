@@ -32,10 +32,13 @@ const ImageUpload = () => {
   };
 
   return (
-    <div>
-      <h2>Upload an Image</h2>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+    <div className="card mt-3">
+      <h4 className="card-header h4">Upload an Image</h4>
+      <div className="input-group my-3 p-4">
+  <input onChange={handleFileChange} type="file" className="form-control" ></input>
+  <button className="btn btn-dark" onClick={handleUpload}>Upload</button>
+</div>
+      
       {message && <p>{message}</p>}
     </div>
   );
