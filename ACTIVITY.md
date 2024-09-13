@@ -1,6 +1,6 @@
 ### Create an AWS Infrastructure for this app
 
-[![mern_aws.drawio.png](./mern_aws.drawio.png)]
+![mern_aws.drawio.png](./mern_aws.drawio.png)
 
 ## Prerequisites:
 - An AWS account
