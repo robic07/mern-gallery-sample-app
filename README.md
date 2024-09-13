@@ -145,5 +145,8 @@ docker compose -f compose.yml up -d --build
 
 > [!NOTE]  
 > Make sure to change and check `environment` on **frontend** and **backend** service. Frontend uses `VITE_BACKEND_ENDPOINT` and `VITE_SERVER_HOSTNAME`. 
+>
 > Keep `VITE_BACKEND_ENDPOINT` to the value of `localhost` even the backend is deployed as a service in docker compose. This is because frontend do not communicate internally when serving HTML files. Your local browser tries to find that endpoint from your local network instead of the frontend container trying to connect to the endpoint. Only change the endpoint when the backend is deployed in a different server.
+>
+> To use `VITE_SERVER_HOSTNAME` always run this command first `export VITE_SERVER_HOSTNAME=$(hostname)` in whatever environment you are deploying.
 
