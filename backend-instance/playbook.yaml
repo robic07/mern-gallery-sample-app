@@ -1,6 +1,6 @@
 ---
 - name: Deploy backend compose file to backend instance
-  hosts: backend_instance1
+  hosts: backend
   become: yes
   vars:
     backend_path: /home/ec2-user/mern-gallery-sample-app/backend
