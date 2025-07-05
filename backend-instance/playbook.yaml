@@ -17,7 +17,7 @@
 
     - name: Copy backend docker-compose file
       copy:
-        dest: "{{ backend_path }}/docker-compose.yml"
+        dest: "{{ backend_path }}/compose.yml"
         content: |
           services:
             backend:
@@ -44,7 +44,8 @@
     #     chdir: "{{ backend_path }}"
 
     - name: Run backend with Docker Compose
-      command: docker compose -f docker-compose.yml up -d
+      command: docker compose -f compose.yml up -d
       args:
         chdir: "{{ backend_path }}"
+
 
