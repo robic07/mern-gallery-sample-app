@@ -44,6 +44,7 @@
     #     chdir: "{{ backend_path }}"
 
     - name: Run backend with Docker Compose
-      command: docker compose -f "{{ backend_path }}/docker-compose.yml" up -d
+      command: docker compose -f docker-compose.yml up -d
       args:
         chdir: "{{ backend_path }}"
+
