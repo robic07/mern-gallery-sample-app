@@ -1,0 +1,61 @@
+---
+- name: Deploy MongoDB using an external compose.yaml
+  hosts: mongo
+  become: yes
+  vars:
+    mongo_compose_dir: /opt/mongodb
+    mongo_compose_file: compose.yaml
+
+  tasks:
+
+    - name: Ensure Docker is installed (Amazon Linux)
+      package:
+        name: docker
+        state: present
+      when: ansible_distribution == "Amazon"
+
+    - name: Ensure Docker is installed (Ubuntu/Debian)
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create target directory for docker-compose file
+      file:
+        path: "{{ mongo_compose_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Copy compose.yaml to target directory
+      copy:
+        src: "{{ mongo_compose_file }}"
+        dest: "{{ mongo_compose_dir }}/compose.yaml"
+        mode: '0644'
+
+    - name: Check if Docker Compose is already installed
+      command: docker-compose --version
+      register: compose_version
+      changed_when: false
+      failed_when: false
+      ignore_errors: true
+
+    - name: Install Docker Compose (v2 binary) if not present
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+      when: compose_version.rc != 0
+
+    - name: Run docker-compose up
+      command: docker-compose -f compose.yaml up -d
+      args:
+        chdir: "{{ mongo_compose_dir }}"
