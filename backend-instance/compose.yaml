@@ -1,0 +1,7 @@
+services:
+  backend:
+    image: robic07/mern-backend:latest
+    ports:
+      - 5000:5000
+    env_file:
+      - .env

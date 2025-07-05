@@ -150,3 +150,37 @@ docker compose -f compose.yml up -d --build
 >
 > To use `VITE_SERVER_HOSTNAME` always run this command first `export VITE_SERVER_HOSTNAME=$(hostname)` in whatever environment you are deploying.
 
+## Steps to install mongoDB
+1. Install Ansible on your Bastion Host Public Instance.
+2. Git Clone this repository.
+3. create a ansible folder
+4. create a inventory.ini inside it.
+5. change the value below
+``` 
+  [backend]
+  backend-instance1 ansible_host=
+
+  [mongo]
+  mongoDB2 ansible_host=
+
+  [frontend]
+  frontend-instance1 ansible_host=
+
+  [backend:vars]
+  ansible_user=ec2-user
+  ansible_ssh_private_key_file=./devops-batch10.pem
+
+  [frontend:vars]
+  ansible_user=ec2-user
+  ansible_ssh_private_key_file=./devops-batch10.pem
+
+  [mongo:vars]
+  ansible_ssh_private_key_file=./devops-batch10.pem
+  ansible_user=ubuntu
+```
+6. ansible all -m ping
+7. ansible-playbook -i inventory.ini instance-file.yaml
+8. ansible-playbook -i inventory.ini playbook-checker.yaml
+9. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/ec2-mongoDB/playbook.yaml --limit mongo
+10. create a github actions
+11. create a env file on the bastion named backend.env
