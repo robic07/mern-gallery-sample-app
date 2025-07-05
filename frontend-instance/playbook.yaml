@@ -1,6 +1,6 @@
 ---
 - name: Deploy Frontend Stack to Remote Instance
-  hosts: frontend_instance
+  hosts: frontend
   become: yes
   vars:
     project_root: /opt/app  # Remote deploy directory
