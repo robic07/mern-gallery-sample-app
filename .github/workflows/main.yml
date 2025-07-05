@@ -33,25 +33,25 @@ jobs:
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
 
     # ====== SSH to Bastion and Deploy Backend & Frontend ======
-    - name: SSH into Bastion and deploy containers
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.BASTION_IP }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        script: |
-          # === Deploy Backend ===
-          ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.215 << 'EOF'
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-backend:latest
-            cd /home/ubuntu/mern-gallery-sample-app/backend
-            docker compose down
-            docker compose up -d --build
-          EOF
+    # - name: SSH into Bastion and deploy containers
+    #   uses: appleboy/ssh-action@v1.0.0
+    #   with:
+    #     host: ${{ secrets.BASTION_IP }}
+    #     username: ${{ secrets.SSH_USER }}
+    #     key: ${{ secrets.PRIVATE_KEY }}
+    #     script: |
+    #       # === Deploy Backend ===
+    #       ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.215 << 'EOF'
+    #         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-backend:latest
+    #         cd /home/ubuntu/mern-gallery-sample-app/backend
+    #         docker compose down
+    #         docker compose up -d --build
+    #       EOF
 
-          # === Deploy Frontend ===
-          ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.5 << 'EOF'
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
-            cd /home/ubuntu/mern-gallery-sample-app/frontend
-            docker compose down
-            docker compose up -d --build
-          EOF
+    #       # === Deploy Frontend ===
+    #       ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.5 << 'EOF'
+    #         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
+    #         cd /home/ubuntu/mern-gallery-sample-app/frontend
+    #         docker compose down
+    #         docker compose up -d --build
+    #       EOF
