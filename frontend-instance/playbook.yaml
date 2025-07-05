@@ -1,0 +1,38 @@
+---
+- name: Deploy Frontend Stack to Remote Instance
+  hosts: frontend
+  become: yes
+  vars:
+    project_root: /opt/app  # Remote deploy directory
+    compose_file: compose.yml
+
+  tasks:
+    - name: Ensure project directory exists
+      file:
+        path: "{{ project_root }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Copy Docker Compose file
+      copy:
+        src: "{{ compose_file }}"
+        dest: "{{ project_root }}/{{ compose_file }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0644'
+
+    - name: Copy nginx config folder
+      copy:
+        src: nginx/
+        dest: "{{ project_root }}/nginx/"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+        recurse: yes
+
+    - name: Run Docker Compose to deploy frontend stack
+      command: docker compose -f "{{ compose_file }}" up --build -d
+      args:
+        chdir: "{{ project_root }}"
