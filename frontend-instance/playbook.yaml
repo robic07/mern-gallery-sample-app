@@ -25,6 +25,6 @@
         mode: '0644'
 
     - name: Run Docker Compose
-      command: docker compose -f compose.yml up --build -d
+      command: docker-compose -f compose.yml up --build -d
       args:
         chdir: "{{ project_root }}"
