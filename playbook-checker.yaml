@@ -1,0 +1,50 @@
+---
+- name: Check if Docker and Docker Compose are installed
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+
+    # === Check Docker ===
+    - name: Check if Docker is installed
+      stat:
+        path: /usr/bin/docker
+      register: docker_binary
+
+    - name: Show Docker installation status
+      debug:
+        msg: >
+          Docker is {{ 'installed' if docker_binary.stat.exists else 'not installed' }} on {{ inventory_hostname }}
+
+    - name: Get Docker version (if installed)
+      command: docker --version
+      register: docker_version_output
+      when: docker_binary.stat.exists
+      changed_when: false
+
+    - name: Show Docker version
+      debug:
+        msg: "{{ docker_version_output.stdout }}"
+      when: docker_binary.stat.exists
+
+    # === Check Docker Compose ===
+    - name: Check if Docker Compose is installed
+      stat:
+        path: /usr/local/bin/docker-compose
+      register: compose_binary
+
+    - name: Show Docker Compose installation status
+      debug:
+        msg: >
+          Docker Compose is {{ 'installed' if compose_binary.stat.exists else 'not installed' }} on {{ inventory_hostname }}
+
+    - name: Get Docker Compose version (if installed)
+      command: docker-compose --version
+      register: compose_version_output
+      when: compose_binary.stat.exists
+      changed_when: false
+
+    - name: Show Docker Compose version
+      debug:
+        msg: "{{ compose_version_output.stdout }}"
+      when: compose_binary.stat.exists
