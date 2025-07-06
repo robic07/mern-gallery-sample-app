@@ -24,6 +24,11 @@
         dest: "{{ project_root }}/default.conf"
         mode: '0644'
 
+    - name: Pull latest images
+      command: docker-compose -f compose.yml pull
+      args:
+        chdir: "{{ project_root }}"
+
     - name: Run Docker Compose
       command: docker-compose -f compose.yml up --build -d
       args:
