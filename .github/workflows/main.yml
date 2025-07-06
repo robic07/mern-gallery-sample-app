@@ -27,7 +27,7 @@ jobs:
 
     # ====== Build & Push Frontend ======
     - name: Build frontend image
-      run: docker build --build-arg VITE_BACKEND_ENDPOINT=/api --build-arg VITE_SERVER_HOSTNAME=$HOSTNAME -t ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest ./frontend
+      run: docker build --build-arg VITE_SERVER_HOSTNAME=$HOSTNAME -t ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest ./frontend
 
     - name: Push frontend image
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
