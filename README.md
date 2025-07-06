@@ -150,12 +150,14 @@ docker compose -f compose.yml up -d --build
 >
 > To use `VITE_SERVER_HOSTNAME` always run this command first `export VITE_SERVER_HOSTNAME=$(hostname)` in whatever environment you are deploying.
 
-## Steps to install mongoDB
-1. Install Ansible on your Bastion Host Public Instance.
-2. Git Clone this repository.
-3. create a ansible folder
-4. create a inventory.ini inside it.
-5. change the value below
+## Steps to Deploy
+1. Create VPC, EC2 Instances, Create S3 Bucket
+2. Create IAM, Add Permission, Create Key Pair
+3. Install Ansible on your Bastion Host Public Instance.
+4. Git Clone this repository.
+5. create a ansible folder
+6. create a inventory.ini inside it.
+7. change the value below
 ``` 
   [backend]
   backend-instance1 ansible_host=
@@ -178,9 +180,11 @@ docker compose -f compose.yml up -d --build
   ansible_ssh_private_key_file=./devops-batch10.pem
   ansible_user=ubuntu
 ```
-6. ansible all -m ping
-7. ansible-playbook -i inventory.ini instance-file.yaml
-8. ansible-playbook -i inventory.ini playbook-checker.yaml
-9. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/ec2-mongoDB/playbook.yaml --limit mongo
-10. create a github actions
-11. create a env file on the bastion named backend.env
+8. ansible all -m ping
+9. ansible-playbook -i inventory.ini instance-file.yaml
+10. ansible-playbook -i inventory.ini playbook-checker.yaml
+11. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/ec2-mongoDB/playbook.yaml --limit mongo
+12. create a github actions
+13. create a env file on the bastion named backend.env
+14. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/backend-instance/playbook.yaml --limit backend
+15. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/frontend-instance/playbook.yaml --limit frontend
