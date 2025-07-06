@@ -12,7 +12,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./default.conf:/etc/nginx/conf.d
+      - ./default.conf:/etc/nginx/conf.d/default.conf # ✅ FIXED
     depends_on:
       - frontend
     networks:
