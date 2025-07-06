@@ -20,8 +20,8 @@
 
     - name: Copy nginx.conf
       copy:
-        src: nginx.conf
-        dest: "{{ project_root }}/nginx.conf"
+        src: default.conf
+        dest: "{{ project_root }}/default.conf"
         mode: '0644'
 
     - name: Run Docker Compose
