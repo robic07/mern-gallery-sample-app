@@ -1,7 +1,10 @@
 name: Build and Deploy via Bastion
 
 on:
-  workflow_dispatch:  # Trigger manually from GitHub UI
+  push:
+    branches:
+      - main          # ✅ Trigger on push to main
+  workflow_dispatch:   # ✅ Manual trigger from GitHub UI
 
 jobs:
   build-and-deploy:
@@ -32,26 +35,18 @@ jobs:
     - name: Push frontend image
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
 
-    # ====== SSH to Bastion and Deploy Backend & Frontend ======
-    # - name: SSH into Bastion and deploy containers
-    #   uses: appleboy/ssh-action@v1.0.0
-    #   with:
-    #     host: ${{ secrets.BASTION_IP }}
-    #     username: ${{ secrets.SSH_USER }}
-    #     key: ${{ secrets.PRIVATE_KEY }}
-    #     script: |
-    #       # === Deploy Backend ===
-    #       ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.215 << 'EOF'
-    #         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-backend:latest
-    #         cd /home/ubuntu/mern-gallery-sample-app/backend
-    #         docker compose down
-    #         docker compose up -d --build
-    #       EOF
+    # ====== SSH to Bastion and Run Ansible Playbooks ======
+    - name: Deploy via Ansible from Bastion
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.BASTION_IP }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+          cd ansible
+          
+          # Deploy backend
+          ansible-playbook -i inventory.ini ../mern-gallery-sample-app/backend-instance/playbook.yaml --limit backend
 
-    #       # === Deploy Frontend ===
-    #       ssh -o StrictHostKeyChecking=no ubuntu@10.0.2.5 << 'EOF'
-    #         docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mern-frontend:latest
-    #         cd /home/ubuntu/mern-gallery-sample-app/frontend
-    #         docker compose down
-    #         docker compose up -d --build
-    #       EOF
+          # Deploy frontend
+          ansible-playbook -i inventory.ini ../mern-gallery-sample-app/frontend-instance/playbook.yaml --limit frontend
