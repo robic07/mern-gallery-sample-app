@@ -161,12 +161,15 @@ docker compose -f compose.yml up -d --build
 ``` 
   [backend]
   backend-instance1 ansible_host=
-
-  [mongo]
-  mongoDB2 ansible_host=
+  backend-instance2 ansible_host=
+  backend-instance3 ansible_host=
 
   [frontend]
   frontend-instance1 ansible_host=
+  frontend-instance2 ansible_host=
+
+  [mongo]
+  mongoDB2 ansible_host=
 
   [backend:vars]
   ansible_user=ec2-user
@@ -177,8 +180,8 @@ docker compose -f compose.yml up -d --build
   ansible_ssh_private_key_file=./devops-batch10.pem
 
   [mongo:vars]
-  ansible_ssh_private_key_file=./devops-batch10.pem
   ansible_user=ubuntu
+  ansible_ssh_private_key_file=./devops-batch10.pem
 ```
 8. ansible all -m ping
 9. ansible-playbook -i inventory.ini instance-file.yaml
@@ -186,5 +189,13 @@ docker compose -f compose.yml up -d --build
 11. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/ec2-mongoDB/playbook.yaml --limit mongo
 12. create a github actions
 13. create a env file on the bastion named backend.env
-14. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/backend-instance/playbook.yaml --limit backend
-15. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/frontend-instance/playbook.yaml --limit frontend
+14. create a backend.env file
+```
+MONGODB_URI=mongodb://10.0.2.243:27017/todos
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET_NAME=
+AWS_REGION=us-east-1
+```
+15. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/backend-instance/playbook.yaml --limit backend
+16. ansible-playbook -i inventory.ini ../mern-gallery-sample-app/frontend-instance/playbook.yaml --limit frontend
